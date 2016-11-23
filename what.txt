@@ -1,6 +1,6 @@
 ideas man
-run sfc
 run dism
+run sfc
 run antivirus stuff
 run defrag (really only needed for xp)
 

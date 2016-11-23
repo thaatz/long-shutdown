@@ -1,0 +1,14 @@
+switches to skip pretty much everything in tron
+
+ -e   Accept EULA (suppress disclaimer warning screen)
+ -m   Preserve default Metro apps (don't remove them)
+ -o   Power off after running (overrides -r)
+ -p   Preserve power settings (don't reset to Windows default)
+ -sdb Skip de-bloat (OEM bloatware removal; implies -m)
+ -se  Skip Event Log backup and clear (don't clear Windows Event Logs)
+ -sm  Skip Malwarebytes Anti-Malware (MBAM) installation
+ -sp  Skip patches (do not patch 7-Zip, Java Runtime, Adobe Flash or Reader)
+ -spr Skip page file reset (don't set to "Let Windows manage the page file")
+ -str Skip Telemetry Removal (just turn telemetry off instead of removing it)
+ -sw  Skip Windows Updates (do not attempt to run Windows Update)
+
