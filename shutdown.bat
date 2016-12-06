@@ -1,6 +1,6 @@
 @echo off
 REM directory
-echo long-shutdown - %date% at %time%>>"%userprofile%\desktop\long-shutdown.log"
+echo long-shutdown - SHUTDOWN %date% at %time%>>"%userprofile%\desktop\long-shutdown.log"
 dism /online /NoRestart /cleanup-image /scanhealth /Logpath:"%userprofile%\desktop\dism_check.log"
 if not %ERRORLEVEL%==0 (
 	:: Add /LimitAccess flag to this command to prevent connecting to Windows Update for replacement files
