@@ -1,4 +1,5 @@
 @echo off
 REM SET DIRECTORY
-shutdown /s /f
+REM shutdown /s /f
+shutdown /s /t 120
 @del temp.bat
