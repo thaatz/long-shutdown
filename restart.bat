@@ -1,5 +1,5 @@
 @echo off
-REM directory
+REM pushd %~dp0 2>NUL
 echo long-shutdown - RESTART %date% at %time%>>"%userprofile%\desktop\long-shutdown.log"
 dism /online /NoRestart /cleanup-image /scanhealth /Logpath:"%userprofile%\desktop\dism_check.log"
 if not %ERRORLEVEL%==0 (
@@ -35,5 +35,5 @@ if /i not %ERRORLEVEL%==0 (
 	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
 	echo CHKDSK: No errors found on %SystemDrive%. >>"%userprofile%\desktop\long-shutdown.log"
 )
-shutdown /r /f
+%SystemRoot%\System32\shutdown /r /f
 echo. >>"%userprofile%\desktop\long-shutdown.log"
