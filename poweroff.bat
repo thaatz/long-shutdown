@@ -1,5 +1,5 @@
 @echo off
-pushd %~dp0 2>NUL
+REM pushd %~dp0 2>NUL
 echo long-shutdown - SHUTDOWN %date% at %time%>>"%userprofile%\desktop\long-shutdown.log"
 dism /online /NoRestart /cleanup-image /scanhealth /Logpath:"%userprofile%\desktop\dism_check.log"
 if not %ERRORLEVEL%==0 (
@@ -33,11 +33,11 @@ if /i not %ERRORLEVEL%==0 (
 	fsutil dirty set %SystemDrive%
 	REM copy temp.bat "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
 	schtasks /create /tn "long-shutdown" /ru SYSTEM /sc ONSTART /tr "%cd%\task.bat" /RL HIGHEST
-	shutdown /r /f
+	%SystemRoot%\System32\shutdown /r /f
 ) else (
 	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
 	echo CHKDSK: No errors found on %SystemDrive%. >>"%userprofile%\desktop\long-shutdown.log"
-	shutdown /s /f
+	%SystemRoot%\System32\shutdown /s /f
 	REM shutdown /r /f
 )
 echo. >>"%userprofile%\desktop\long-shutdown.log"
