@@ -1,39 +1,52 @@
 @echo off
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: USER SETTINGS
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+set longshutdownlog=%userprofile%\desktop\long-shutdown.log
+set debug=1
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+if %debug% EQU 1 (
+	set bugger=^>^>"%longshutdownlog%"
+) else (
+	set bugger=^>nul
+)
+
 REM pushd %~dp0 2>NUL
-echo long-shutdown - RESTART %date% at %time%>>"%userprofile%\desktop\long-shutdown.log"
+echo long-shutdown - RESTART %date% at %time%>>"%longshutdownlog%"
 dism /online /NoRestart /cleanup-image /scanhealth /Logpath:"%userprofile%\desktop\dism_check.log"
 if not %ERRORLEVEL%==0 (
 	:: Add /LimitAccess flag to this command to prevent connecting to Windows Update for replacement files
 	Dism /Online /NoRestart /Cleanup-Image /RestoreHealth /Logpath:"%userprofile%\desktop\dism_repair.log"
 	if not %ERRORLEVEL%==0 (
-		echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-		echo DISM: There was an issue with the DISM repair. >>"%userprofile%\desktop\long-shutdown.log"
+		echo DEBUG: %errorlevel% %bugger%
+		echo DISM: There was an issue with the DISM repair. >>"%longshutdownlog%"
 	) else (
-		echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-		echo DISM: Image repaired successfully. >>"%userprofile%\desktop\long-shutdown.log"
+		echo DEBUG: %errorlevel% %bugger%
+		echo DISM: Image repaired successfully. >>"%longshutdownlog%"
 	)
 ) else (
-	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-	echo DISM: No image corruption detected. >>"%userprofile%\desktop\long-shutdown.log"
+	echo DEBUG: %errorlevel% %bugger%
+	echo DISM: No image corruption detected. >>"%longshutdownlog%"
 )
 
 sfc /scannow
 if not %ERRORLEVEL%==0 (
-	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-	echo SFC: There was an issue with the SFC repair. >>"%userprofile%\desktop\long-shutdown.log"
+	echo DEBUG: %errorlevel% %bugger%
+	echo SFC: There was an issue with the SFC repair. >>"%longshutdownlog%"
 ) else (
-	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-	echo SFC: SFC completed sucessfully. >>"%userprofile%\desktop\long-shutdown.log"
+	echo DEBUG: %errorlevel% %bugger%
+	echo SFC: SFC completed sucessfully. >>"%longshutdownlog%"
 )
 
 chkdsk %SystemDrive%
 if /i not %ERRORLEVEL%==0 (
-	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-	echo CHKDSK: Errors found on %SystemDrive%. >>"%userprofile%\desktop\long-shutdown.log"
+	echo DEBUG: %errorlevel% %bugger%
+	echo CHKDSK: Errors found on %SystemDrive%. >>"%longshutdownlog%"
 	fsutil dirty set %SystemDrive%
 ) else (
-	echo DEBUG: %errorlevel% >>"%userprofile%\desktop\long-shutdown.log"
-	echo CHKDSK: No errors found on %SystemDrive%. >>"%userprofile%\desktop\long-shutdown.log"
+	echo DEBUG: %errorlevel% %bugger%
+	echo CHKDSK: No errors found on %SystemDrive%. >>"%longshutdownlog%"
 )
 %SystemRoot%\System32\shutdown /r /f
-echo. >>"%userprofile%\desktop\long-shutdown.log"
+echo. >>"%longshutdownlog%"
