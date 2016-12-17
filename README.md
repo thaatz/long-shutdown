@@ -15,7 +15,7 @@ Run restart.bat when you want to restart and have it take about 30 minutes.
 * run defrag (really only needed for xp)
 
 ----------
-nitty gritty
+nitty gritty psuedocode (ill update this later)
 ----------
 run chkdsk
 	if dirty
