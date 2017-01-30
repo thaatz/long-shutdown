@@ -23,5 +23,6 @@ run chkdsk
 		restart the computer
 	else
 		shutdown
-todo
+
+### todo
 * make use of runonce registry entries to shutdown the computer instead of the current method after restarting
