@@ -1,0 +1,3 @@
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe \"%~dp0chklog.ps1\""
+REM reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d 'powershell.exe -Command \"& {get-winevent -FilterHashTable @{logname=\"Application\"; id='1001'}| ?{$_.providername –match \"wininit\"} | fl timecreated, message | out-file \"$home\Desktop\CHKDSKResults.txt\"}\"
+pause

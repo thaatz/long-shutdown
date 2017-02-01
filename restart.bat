@@ -39,14 +39,23 @@ if not %ERRORLEVEL%==0 (
 	echo SFC: SFC completed sucessfully. >>"%longshutdownlog%"
 )
 
-chkdsk %SystemDrive%
-if /i not %ERRORLEVEL%==0 (
-	echo DEBUG: %errorlevel% %bugger%
-	echo CHKDSK: Errors found on %SystemDrive%. >>"%longshutdownlog%"
-	fsutil dirty set %SystemDrive%
-) else (
-	echo DEBUG: %errorlevel% %bugger%
-	echo CHKDSK: No errors found on %SystemDrive%. >>"%longshutdownlog%"
-)
+REM chkdsk %SystemDrive%
+REM if /i not %ERRORLEVEL%==0 (
+	REM echo DEBUG: %errorlevel% %bugger%
+	REM echo CHKDSK: Errors found on %SystemDrive%. >>"%longshutdownlog%"
+	REM fsutil dirty set %SystemDrive%
+REM ) else (
+	REM echo DEBUG: %errorlevel% %bugger%
+	REM echo CHKDSK: No errors found on %SystemDrive%. >>"%longshutdownlog%"
+REM )
+fsutil dirty set %SystemDrive%
+:: make the log when you log in
+:: we use HKCU instead of HKLM so that its just for the user who ran this
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe \"%~dp0\chklog.ps1\""
+REM reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe -Command \"^& {get-winevent -FilterHashTable @{logname=\\""Application\\^"; id='1001'}^| ?{$_.providername –match \\"wininit\\"} ^| fl timecreated, message ^| out-file \\"$home\Desktop\CHKDSKResults.txt\\"}"""
+:: i tried to simplify this using excape charcters, but just couldn't get it.
+:: http://ss64.com/nt/syntax-esc.html
+:: this command would work if pasted in cmd
+:: powershell.exe -Command "& {get-winevent -FilterHashTable @{logname=\"Application\"; id='1001'}| ?{$_.providername –match \"wininit\"} | fl timecreated, message | out-file \"$home\Desktop\CHKDSKResults.txt\"}"
 %SystemRoot%\System32\shutdown /r /f
 echo. >>"%longshutdownlog%"
