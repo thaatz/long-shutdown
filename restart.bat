@@ -14,21 +14,31 @@ if %debug% EQU 1 (
 
 REM pushd %~dp0 2>NUL
 echo long-shutdown - RESTART %date% at %time%>>"%longshutdownlog%"
-dism /online /NoRestart /cleanup-image /scanhealth /Logpath:"%userprofile%\desktop\dism_check.log"
+:: Add /LimitAccess flag to this command to prevent connecting to Windows Update for replacement files
+dism /online /NoRestart /cleanup-image /restorehealth /Logpath:"%userprofile%\desktop\dism_check.log"
 if not %ERRORLEVEL%==0 (
-	:: Add /LimitAccess flag to this command to prevent connecting to Windows Update for replacement files
-	Dism /Online /NoRestart /Cleanup-Image /RestoreHealth /Logpath:"%userprofile%\desktop\dism_repair.log"
-	if not %ERRORLEVEL%==0 (
-		echo DEBUG: %errorlevel% %bugger%
-		echo DISM: There was an issue with the DISM repair. >>"%longshutdownlog%"
-	) else (
-		echo DEBUG: %errorlevel% %bugger%
-		echo DISM: Image repaired successfully. >>"%longshutdownlog%"
-	)
+	echo DEBUG: %errorlevel% %bugger%
+	echo DISM: There was an issue with the DISM repair. >>"%longshutdownlog%"
 ) else (
 	echo DEBUG: %errorlevel% %bugger%
-	echo DISM: No image corruption detected. >>"%longshutdownlog%"
+	echo DISM: Sucessful. >>"%longshutdownlog%"
 )
+
+REM dism /online /NoRestart /cleanup-image /scanhealth /Logpath:"%userprofile%\desktop\dism_check.log"
+REM if not %ERRORLEVEL%==0 (
+	REM :: Add /LimitAccess flag to this command to prevent connecting to Windows Update for replacement files
+	REM Dism /Online /NoRestart /Cleanup-Image /RestoreHealth /Logpath:"%userprofile%\desktop\dism_repair.log"
+	REM if not %ERRORLEVEL%==0 (
+		REM echo DEBUG: %errorlevel% %bugger%
+		REM echo DISM: There was an issue with the DISM repair. >>"%longshutdownlog%"
+	REM ) else (
+		REM echo DEBUG: %errorlevel% %bugger%
+		REM echo DISM: Image repaired successfully. >>"%longshutdownlog%"
+	REM )
+REM ) else (
+	REM echo DEBUG: %errorlevel% %bugger%
+	REM echo DISM: No image corruption detected. >>"%longshutdownlog%"
+REM )
 
 sfc /scannow
 if not %ERRORLEVEL%==0 (
