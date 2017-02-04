@@ -51,7 +51,8 @@ if not %ERRORLEVEL%==0 (
 
 :: make the log when you log in
 :: we use HKCU instead of HKLM so that its just for the user who ran this
-reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe \"%~dp0\chklog.ps1\""
+:: reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe \"%~dp0\chklog.ps1\""
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "%~dp0\enablepsscripts.bat"
 chkdsk %SystemDrive%
 if /i not %ERRORLEVEL%==0 (
 	echo DEBUG: %errorlevel% %bugger%

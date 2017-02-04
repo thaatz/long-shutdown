@@ -61,7 +61,8 @@ REM )
 fsutil dirty set %SystemDrive%
 :: make the log when you log in
 :: we use HKCU instead of HKLM so that its just for the user who ran this
-reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe \"%~dp0\chklog.ps1\""
+:: reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe \"%~dp0\chklog.ps1\""
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "%~dp0\enablepsscripts.bat"
 REM reg add HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce /v "long-shutdown" /t "REG_SZ" /d "powershell.exe -Command \"^& {get-winevent -FilterHashTable @{logname=\\""Application\\^"; id='1001'}^| ?{$_.providername –match \\"wininit\\"} ^| fl timecreated, message ^| out-file \\"$home\Desktop\CHKDSKResults.txt\\"}"""
 :: i tried to simplify this using excape charcters, but just couldn't get it.
 :: http://ss64.com/nt/syntax-esc.html
